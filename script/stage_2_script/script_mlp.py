@@ -6,6 +6,7 @@ from local_code.stage_2_code.Setting_Train_Test import Setting_Train_Test
 from local_code.stage_2_code.Evaluate_Accuracy import Evaluate_Accuracy
 import numpy as np
 import torch
+import matplotlib.pyplot as plt
 
 #---- Multi-Layer Perceptron script ----
 if 1:
@@ -41,6 +42,18 @@ if 1:
     setting_obj.prepare(data_obj, method_obj, result_obj, evaluate_obj,data_obj_2)
     setting_obj.print_setup_summary()
     score = setting_obj.load_run_save_evaluate()
+
+    # ---- plot learning curve ------------------------------
+    plt.figure(figsize=(8, 5))
+    plt.plot(range(len(method_obj.loss_history)), method_obj.loss_history)
+    plt.title('MLP Training Loss Convergence')
+    plt.xlabel('Epoch')
+    plt.ylabel('Training Loss')
+    plt.grid(True)
+    plt.savefig('result/stage_2_result/MLP_loss_curve.png', dpi=150)
+    plt.show()
+    # ------------------------------------------------------
+
     print('************ Overall Performance ************')
     print(f'MLP Accuracy:          {score:.4f}')
     print(f'MLP Precision (macro): {evaluate_obj.PrecisionScore():.4f}')
