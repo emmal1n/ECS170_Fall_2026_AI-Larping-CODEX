@@ -6,7 +6,7 @@ Concrete MethodModule class for a specific learning MethodModule
 # License: TBD
 
 from local_code.base_class.method import method
-from local_code.stage_1_code.Evaluate_Accuracy import Evaluate_Accuracy
+from local_code.stage_2_code.Evaluate_Accuracy import Evaluate_Accuracy
 import torch
 from torch import nn
 import numpy as np
@@ -15,7 +15,7 @@ import numpy as np
 class Method_MLP(method, nn.Module):
     data = None
     # it defines the max rounds to train the model
-    max_epoch = 500
+    max_epoch = 10
     # it defines the learning rate for gradient descent based optimizer for model learning
     learning_rate = 1e-3
 
@@ -26,10 +26,10 @@ class Method_MLP(method, nn.Module):
         method.__init__(self, mName, mDescription)
         nn.Module.__init__(self)
         # check here for nn.Linear doc: https://pytorch.org/docs/stable/generated/torch.nn.Linear.html
-        self.fc_layer_1 = nn.Linear(4, 4)
+        self.fc_layer_1 = nn.Linear(784, 784)
         # check here for nn.ReLU doc: https://pytorch.org/docs/stable/generated/torch.nn.ReLU.html
         self.activation_func_1 = nn.ReLU()
-        self.fc_layer_2 = nn.Linear(4, 2)
+        self.fc_layer_2 = nn.Linear(784, 10)
         # check here for nn.Softmax doc: https://pytorch.org/docs/stable/generated/torch.nn.Softmax.html
         self.activation_func_2 = nn.Softmax(dim=1)
 
@@ -80,7 +80,7 @@ class Method_MLP(method, nn.Module):
 
             if epoch%100 == 0:
                 accuracy_evaluator.data = {'true_y': y_true, 'pred_y': y_pred.max(1)[1]}
-                print('Epoch:', epoch, 'Accuracy:', accuracy_evaluator.evaluate(), 'Loss:', train_loss.item())
+                print('Epoch:', epoch, 'Accuracy:', accuracy_evaluator.evaluate(),'Precision:',accuracy_evaluator.PrecisionScore(),'Recall:',accuracy_evaluator.RecallScore(),'F1:',accuracy_evaluator.f1Score(),'Loss:', train_loss.item())
     
     def test(self, X):
         # do the testing, and result the result
