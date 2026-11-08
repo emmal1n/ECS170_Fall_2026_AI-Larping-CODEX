@@ -65,7 +65,10 @@ class Method_CNN(method, nn.Module):
         if self.loss_name == 'ce_smooth':
             return F.cross_entropy(logits, y, label_smoothing=0.1)
         if self.loss_name == 'hinge':
-            return F.multi_margin_loss(logits, y)
+            correct = logits.gather(1, y[:, None])              
+            margins = (1 - correct + logits).clamp(min=0)          
+            margins = margins.scatter(1, y[:, None], 0)            
+            return margins.sum(1).mean() / self.n_classes
         if self.loss_name == 'mse':
             return F.mse_loss(F.softmax(logits, 1), F.one_hot(y, self.n_classes).float())
         raise ValueError(self.loss_name)
