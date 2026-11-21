@@ -1,0 +1,6 @@
+model,train_loss,token_accuracy,parameters,hidden,layers,epochs
+RNN,0.6168,0.8751,946793,128,1,120
+LSTM,0.9742,0.7993,1021289,128,1,120
+GRU,0.6274,0.8744,996457,128,1,120
+LSTM hidden 64,1.9587,0.5924,649513,64,1,120
+GRU 2 layers,0.9289,0.8144,1095529,128,2,120
